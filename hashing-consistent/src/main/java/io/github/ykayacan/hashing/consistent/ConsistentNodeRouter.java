@@ -87,6 +87,9 @@ public class ConsistentNodeRouter<N extends PhysicalNode> implements NodeRouter<
     }
 
     Long nodeHash = ring.ceilingKey(hashFunction.hash(nodeId));
+    if (nodeHash == null) {
+      nodeHash = ring.floorKey(hashFunction.hash(nodeId));
+    }
     return Optional.ofNullable(ring.get(nodeHash)).map(VirtualNode::getPhysicalNode);
   }
 
